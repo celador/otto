@@ -1,0 +1,149 @@
+{
+ "type": "events",
+ "repo": "ios-site",
+ "events": [
+  {
+   "seq": 8,
+   "repo": "ios-site",
+   "status": "accepted",
+   "kind": "checkpoint",
+   "ts": "2026-10-04T03:19:41.513Z",
+   "actor": {
+    "type": "agent",
+    "id": "hermes-d",
+    "harness": "hermes"
+   },
+   "agent": "hermes-d",
+   "task": "T-9",
+   "change": "I-d",
+   "session": "s3",
+   "base_seq": 7,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "hermes-d pushed checkpoint c0ffee1",
+   "diagnostics": [],
+   "payload": {
+    "sha": "c0ffee12",
+    "x_task_title": "Document phone observing",
+    "x_evidence": {
+     "preview_url": "https://example.com",
+     "tests": {
+      "passed": 12,
+      "failed": 0,
+      "total": 12
+     }
+    }
+   }
+  },
+  {
+   "seq": 9,
+   "repo": "ios-site",
+   "status": "accepted",
+   "kind": "leave",
+   "ts": "2026-10-04T03:19:47.556Z",
+   "actor": {
+    "type": "system",
+    "id": "coordinator"
+   },
+   "agent": "hermes-d",
+   "task": "T-9",
+   "change": "I-d",
+   "session": "s1",
+   "base_seq": 8,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "intent": "session expired",
+   "summary": "hermes-d left \u2014 session expired",
+   "diagnostics": [],
+   "payload": {
+    "harness": "hermes",
+    "level": 3
+   }
+  },
+  {
+   "seq": 10,
+   "repo": "ios-site",
+   "status": "accepted",
+   "kind": "leave",
+   "ts": "2026-10-04T03:19:54.748Z",
+   "actor": {
+    "type": "system",
+    "id": "coordinator"
+   },
+   "agent": "hermes-d",
+   "task": "T-9",
+   "change": "I-d",
+   "session": "s2",
+   "base_seq": 9,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "intent": "session expired",
+   "summary": "hermes-d left \u2014 session expired",
+   "diagnostics": [],
+   "payload": {
+    "harness": "hermes",
+    "level": 3
+   }
+  },
+  {
+   "seq": 11,
+   "repo": "ios-site",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:20:27.516Z",
+   "actor": {
+    "type": "agent",
+    "id": "hermes-d",
+    "harness": "hermes"
+   },
+   "agent": "hermes-d",
+   "task": "T-9",
+   "change": "I-d",
+   "session": "s4",
+   "base_seq": 10,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "hermes-d joined (hermes, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "hermes",
+    "level": 3
+   }
+  },
+  {
+   "seq": 12,
+   "repo": "ios-site",
+   "status": "accepted",
+   "kind": "intent",
+   "ts": "2026-10-04T03:20:28.102Z",
+   "actor": {
+    "type": "agent",
+    "id": "hermes-d",
+    "harness": "hermes"
+   },
+   "agent": "hermes-d",
+   "task": "T-9",
+   "change": "I-d",
+   "session": "s4",
+   "base_seq": 11,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "intent": "link the observer doc from the README",
+   "summary": "hermes-d plans \u2014 link the observer doc from the README",
+   "diagnostics": [],
+   "payload": {
+    "x_task_title": "Docs: watching agents from a phone"
+   }
+  }
+ ],
+ "head_seq": 12,
+ "next_after": 12,
+ "has_more": false
+}

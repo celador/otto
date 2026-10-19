@@ -1,0 +1,35 @@
+{
+  "schema": "EventRecord",
+  "value": {
+    "seq": 31,
+    "repo": "weft-demo",
+    "status": "accepted",
+    "kind": "land",
+    "ts": "2026-10-05T15:00:00.000Z",
+    "actor": {
+      "type": "system",
+      "id": "landing-queue"
+    },
+    "agent": "claude-a",
+    "task": "T-1",
+    "change": "I4f2a",
+    "base_seq": 30,
+    "files": [
+      "src/auth/session.ts"
+    ],
+    "reads": [],
+    "writes": [
+      {
+        "key": "src/auth/session.ts#refreshToken",
+        "kind": "signature"
+      }
+    ],
+    "summary": "claude-a landed I4f2a (1 symbol)",
+    "diagnostics": [],
+    "payload": {
+      "sha": "9e1b77a0c4",
+      "op_id": "op_000031",
+      "trunk_ref": "refs/heads/main"
+    }
+  }
+}

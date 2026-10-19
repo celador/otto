@@ -1,0 +1,53 @@
+{
+  "schema": "FeedPage",
+  "value": {
+    "type": "feed",
+    "events": [
+      {
+        "seq": 12,
+        "repo": "weft-demo",
+        "status": "accepted",
+        "kind": "edit",
+        "ts": "2026-10-05T14:03:11.204Z",
+        "actor": {
+          "type": "agent",
+          "id": "claude-a",
+          "harness": "claude-code"
+        },
+        "agent": "claude-a",
+        "task": "T-1",
+        "change": "I4f2a",
+        "session": "s1",
+        "base_seq": 9,
+        "mode": "commit",
+        "files": [
+          "src/auth/session.ts"
+        ],
+        "reads": [
+          "src/auth/session.ts#RefreshOpts"
+        ],
+        "writes": [
+          {
+            "key": "src/auth/session.ts#refreshToken",
+            "kind": "signature"
+          }
+        ],
+        "intent": "add a retry budget to token refresh",
+        "summary": "claude-a changed signature of refreshToken in src/auth/session.ts — add a retry budget to token refresh",
+        "diagnostics": [],
+        "tool": {
+          "name": "Edit",
+          "call_id": "toolu_01",
+          "harness_event": "PostToolUse"
+        },
+        "transcript": {
+          "uri": "r2://weft-transcripts/I4f2a/claude-a.jsonl",
+          "offset": 1824
+        },
+        "has_diff": true
+      }
+    ],
+    "cursor": "v0.eyJ3ZWZ0LWRlbW8iOjEyfQ",
+    "has_more": false
+  }
+}

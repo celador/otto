@@ -1,0 +1,41 @@
+{
+ "seq": 36,
+ "repo": "ios-demo",
+ "status": "accepted",
+ "kind": "checkpoint",
+ "ts": "2026-10-04T03:20:12.995Z",
+ "actor": {
+  "type": "agent",
+  "id": "claude-a",
+  "harness": "claude-code"
+ },
+ "agent": "claude-a",
+ "task": "T-1",
+ "change": "I-a",
+ "session": "s6",
+ "base_seq": 35,
+ "mode": "commit",
+ "files": [],
+ "reads": [],
+ "writes": [],
+ "summary": "claude-a pushed checkpoint 4f2c9e1",
+ "diagnostics": [],
+ "payload": {
+  "sha": "4f2c9e1a",
+  "ref": "refs/weft/I-a",
+  "x_task_title": "Retry budget for token refresh",
+  "x_evidence": {
+   "preview_url": "https://i-a.preview.example.dev",
+   "tests": {
+    "passed": 148,
+    "failed": 0,
+    "total": 148
+   },
+   "review": {
+    "verdict": "approve",
+    "summary": "Retry budget is bounded; overload keeps old callers compiling."
+   },
+   "cost_usd": 0.42
+  }
+ }
+}

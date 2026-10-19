@@ -1,0 +1,20 @@
+mode for hermes-ios: enforce
+A: applied 
+B: applied [weft diagnostics]
+[weft warning] claim_wait scratch-weft-probe/Probe1792298814.swift#*: scratch-weft-probe/Probe1792298814.swift#* is being edited by hermes-default (hermes-default/weft-probe-a-1792298814), which has precedence. (caused by hermes-default · task weft-probe-a-1792298814 · event #562). Suggestion: Wait for hermes-default to land or release scratch-weft-probe/Probe1792298814.swift#*, work elsewhere, or negotiate (negotiate.propose to hermes-default). Options: retreat | wait | negotiate | escalate.
+A land: landed 564
+B after land: blocked [weft] Edit blocked by Weft edit-time coordination (another agent's change conflicts with this edit to scratch-weft-probe/Probe1792298814.swift). Diagnostics:
+[weft error] stale_overwrite scratch-weft-probe/Probe1792298814.swift#*: scratch-weft-probe/Probe1792298814.swift#* changed on trunk (#564, land by hermes-default) after your base #563; this edit would overwrite it. (caused by hermes-default · task weft-probe-a-1792298814 · event #564). Suggestion: Rebase onto trunk at or after #564, then redo the edit.
+[weft info] trunk_advanced scratch-weft-probe/Probe1792298814.swift#*: Trunk moved (#
+B retry: blocked [weft] Edit blocked by Weft edit-time coordination (another agent's change conflicts with this edit to scratch-weft-probe/Probe1792298814.swift). Diagnostics:
+[weft error] stale_overwrite scratch-weft
+B git commit gate: BLOCKED [weft] git commit refused by the Weft commit gate: 1 open Weft error(s) must be resolved first:
+[weft error] stale_overwrite scratch-weft-probe/Probe1792298814.swift#*: scratch-weft-probe/Probe1792298814.swift#* changed on trunk (#564, land by hermes-default) after your base #563; this edit would ov
+cleanup land a: landed
+cleanup land b: landed
+PASS A writes the file -> applied
+PASS B (stale base, same file) is blocked or told before commit
+PASS A's change lands on trunk
+PASS B edits on its pre-landing base -> BLOCKED (stale_overwrite)
+PASS B's retry without rebasing -> still blocked
+PASS B's git commit is refused while the stale_overwrite is open

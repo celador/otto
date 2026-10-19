@@ -1,0 +1,8 @@
+// Build settings shared by every target (project.yml -> configFiles).
+// Machine-specific values go in Config/Local.xcconfig (gitignored; copy Local.xcconfig.example).
+
+// Tailnet host of your Hermes Mac, e.g. my-mac.my-tailnet.ts.net (host only, no scheme: "//" starts a
+// comment in xcconfig files). Empty = no default; Otto shows its normal connect / pair screen.
+OTTO_DEFAULT_HOST =
+
+#include? "Local.xcconfig"

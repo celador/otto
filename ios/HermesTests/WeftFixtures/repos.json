@@ -1,0 +1,19 @@
+{
+  "schema": "RepoList",
+  "value": {
+    "type": "repos",
+    "repos": [
+      {
+        "repo": "weft-demo",
+        "head_seq": 20,
+        "active_agents": 3,
+        "active_changes": 3,
+        "open_conflicts": 1,
+        "last_event_at": "2026-10-05T14:03:12.001Z",
+        "policy": {
+          "arbitration": "wound-wait"
+        }
+      }
+    ]
+  }
+}

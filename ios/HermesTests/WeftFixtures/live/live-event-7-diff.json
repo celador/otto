@@ -1,0 +1,36 @@
+{
+ "seq": 7,
+ "repo": "ios-demo",
+ "status": "accepted",
+ "kind": "edit",
+ "ts": "2026-10-04T03:14:43.053Z",
+ "actor": {
+  "type": "agent",
+  "id": "claude-a",
+  "harness": "claude-code"
+ },
+ "agent": "claude-a",
+ "task": "T-1",
+ "change": "I-a",
+ "session": "s1",
+ "base_seq": 4,
+ "mode": "commit",
+ "files": [
+  "src/auth/session.ts"
+ ],
+ "reads": [],
+ "writes": [
+  {
+   "key": "src/auth/session.ts#refreshToken",
+   "kind": "signature"
+  },
+  {
+   "key": "src/auth/session.ts#RefreshOpts",
+   "kind": "new"
+  }
+ ],
+ "diff": "--- a/src/auth/session.ts\n+++ b/src/auth/session.ts\n@@ -38,9 +38,16 @@ export class SessionStore {\n-export async function refreshToken(token: string): Promise<Session> {\n-  const res = await post(\"/oauth/refresh\", { token });\n-  return parseSession(res);\n+export interface RefreshOpts {\n+  retries?: number;\n+  backoffMs?: number;\n+}\n+\n+export async function refreshToken(token: string, opts: RefreshOpts = {}): Promise<Session> {\n+  const { retries = 2, backoffMs = 250 } = opts;\n+  for (let attempt = 0; ; attempt++) {\n+    try { return parseSession(await post(\"/oauth/refresh\", { token })); }\n+    catch (e) { if (attempt >= retries) throw e; await sleep(backoffMs * 2 ** attempt); }\n+  }\n }\n",
+ "intent": "add a retry budget to refreshToken",
+ "summary": "claude-a changed signature of refreshToken, added RefreshOpts in src/auth/session.ts \u2014 add a retry budget to refreshToken",
+ "diagnostics": []
+}

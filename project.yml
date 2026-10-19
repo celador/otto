@@ -1,0 +1,314 @@
+name: Hermes
+options:
+  bundleIdPrefix: ai.elier
+  deploymentTarget:
+    iOS: "18.0"
+    watchOS: "10.0"
+    tvOS: "18.0"
+configFiles:
+  # OTTO_DEFAULT_HOST etc.; optional per-machine overrides in Config/Local.xcconfig (gitignored).
+  Debug: Config/Otto.xcconfig
+  Release: Config/Otto.xcconfig
+settings:
+  base:
+    DEVELOPMENT_TEAM: UFF39H3A3T
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "92"
+packages:
+  # Ghostty's engine for the Terminal pane: libghostty + Swift views, with a host-managed I/O backend
+  # (the shell runs on the Hermes host via the relay). Pinned; scripts/build_ghosttykit.sh rebuilds the
+  # same xcframework from source.
+  GhosttyKit:
+    url: https://github.com/Lakr233/libghostty-spm
+    exactVersion: 2.2.2026101502
+targets:
+  Hermes:
+    type: application
+    platform: iOS
+    sources: [ios/Hermes, ios/Shared, ios/WatchShared, ios/LimitsShared, ios/HermesWidgets/NowAndJobsWidgets.swift]
+    dependencies:
+      - target: HermesWidgets
+      - package: GhosttyKit
+        product: GhosttyTerminal
+      - package: GhosttyKit
+        product: GhosttyTheme
+      - target: HermesShare
+      - target: HermesWatch
+    info:
+      path: ios/Hermes/Info.plist
+      properties:
+        UIBackgroundModes: [fetch, audio]
+        NSUserActivityTypes: [ai.elier.hermes.chat]
+        BGTaskSchedulerPermittedIdentifiers: [ai.elier.hermes.refresh]
+        CFBundleURLTypes:
+          - CFBundleURLName: ai.elier.hermes
+            CFBundleURLSchemes: [hermes]
+    settings:
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: ai.elier.hermes AppStore
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes
+        PRODUCT_NAME: Hermes
+        CODE_SIGN_ENTITLEMENTS: ios/Hermes/Hermes.entitlements
+        INFOPLIST_KEY_CFBundleDisplayName: "Otto"
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_NSLocalNetworkUsageDescription: "Otto connects to your agent server on your network."
+        INFOPLIST_KEY_NSCameraUsageDescription: "Take a photo to send to your agent."
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "Choose photos to send to your agent."
+        INFOPLIST_KEY_NSSupportsLiveActivities: YES
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Dictate messages to your agent."
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Turns what you say into text for your agent."
+        INFOPLIST_KEY_NSHealthShareUsageDescription: "When you turn on health sharing and ask about sleep, workouts or heart rate, Otto reads a short summary of that data to answer you."
+        INFOPLIST_KEY_NSHealthUpdateUsageDescription: "Otto only reads health data you choose to share, and never writes to Apple Health."
+        ASSETCATALOG_COMPILER_APPICON_NAME: OttoAppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+  HermesWidgets:
+    type: app-extension
+    platform: iOS
+    sources: [ios/HermesWidgets, ios/Shared, ios/WatchShared, ios/LimitsShared]
+    info:
+      path: ios/HermesWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: "Otto"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: ai.elier.hermes.widgets AppStore
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes.widgets
+        PRODUCT_NAME: HermesWidgets
+        CODE_SIGN_ENTITLEMENTS: ios/HermesWidgets/HermesWidgets.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Otto"
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME: ""
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SKIP_INSTALL: YES
+  HermesShare:
+    type: app-extension
+    platform: iOS
+    sources: [ios/HermesShare, ios/LimitsShared, ios/WatchShared]
+    info:
+      path: ios/HermesShare/Info.plist
+      properties:
+        CFBundleDisplayName: "Otto"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsWebURLWithMaxCount: 1
+              NSExtensionActivationSupportsWebPageWithMaxCount: 1
+              NSExtensionActivationSupportsText: true
+              NSExtensionActivationSupportsImageWithMaxCount: 4
+    settings:
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: ai.elier.hermes.share AppStore
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes.share
+        PRODUCT_NAME: HermesShare
+        CODE_SIGN_ENTITLEMENTS: ios/HermesShare/HermesShare.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Otto"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SKIP_INSTALL: YES
+  HermesWatch:
+    type: application
+    platform: watchOS
+    sources: [ios/HermesWatch, ios/WatchShared, ios/LimitsShared, ios/WatchFaces]
+    dependencies:
+      - target: HermesWatchWidgets
+    settings:
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: ai.elier.hermes.watchkitapp AppStore
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes.watchkitapp
+        PRODUCT_NAME: HermesWatch
+        CODE_SIGN_ENTITLEMENTS: ios/HermesWatch/HermesWatch.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Otto"
+        INFOPLIST_KEY_WKCompanionAppBundleIdentifier: ai.elier.hermes
+        INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp: NO
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Talk to your agent."
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SKIP_INSTALL: YES
+        TARGETED_DEVICE_FAMILY: "4"
+  HermesWatchWidgets:
+    type: app-extension
+    platform: watchOS
+    sources: [ios/HermesWatchWidgets, ios/LimitsShared, ios/WatchFaces]
+    info:
+      path: ios/HermesWatchWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: "Otto"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      configs:
+        Release:
+          CODE_SIGN_STYLE: Manual
+          CODE_SIGN_IDENTITY: Apple Distribution
+          PROVISIONING_PROFILE_SPECIFIER: ai.elier.hermes.watchkitapp.widgets AppStore
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes.watchkitapp.widgets
+        PRODUCT_NAME: HermesWatchWidgets
+        CODE_SIGN_ENTITLEMENTS: ios/HermesWatchWidgets/HermesWatchWidgets.entitlements
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Otto"
+        SKIP_INSTALL: YES
+        TARGETED_DEVICE_FAMILY: "4"
+  HermesTV:
+    type: application
+    platform: tvOS
+    sources: [ios/HermesTV, ios/WatchShared, ios/LimitsShared/Limits.swift, ios/LimitsShared/SecureStore.swift, ios/LimitsShared/Jobs.swift,
+              ios/LimitsShared/LimitsRings.swift, ios/LimitsShared/LimitsViews.swift, ios/LimitsShared/LiveStatus.swift]
+    info:
+      path: ios/HermesTV/Info.plist
+      properties:
+        HermesDefaultHost: "$(OTTO_DEFAULT_HOST)"
+        UILaunchScreen: {}
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes
+        PRODUCT_NAME: HermesTV
+        ASSETCATALOG_COMPILER_APPICON_NAME: "App Icon & Top Shelf Image"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Otto"
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        TARGETED_DEVICE_FAMILY: "3"
+        CODE_SIGN_STYLE: Automatic
+
+  OttoMac:
+    # Native macOS app (SwiftUI, not Catalyst). Shares ios/Hermes; iOS-only pieces are
+    # excluded here or guarded with #if os(iOS), and ios/OttoMac adds the Mac shell + shims.
+    type: application
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: ios/Hermes
+        excludes:
+          - App/HermesApp.swift
+          - App/HandsFreeVoice.swift
+          - App/LiveActivityController.swift
+          - App/WatchBridge.swift
+          - App/RunWatcher.swift
+          - App/HealthContext.swift
+          - Views/ComposerTextView.swift
+          - Views/WidgetPreviewView.swift
+          - Views/ConnectTVView.swift
+          - Voice/Haptics.swift
+          - Info.plist
+          - Hermes.entitlements
+      - ios/OttoMac
+      - path: ios/Shared
+        excludes: [HermesRunAttributes.swift]
+      - ios/WatchShared
+      - ios/LimitsShared
+    dependencies:
+      - package: GhosttyKit
+        product: GhosttyTerminal
+      - package: GhosttyKit
+        product: GhosttyTheme
+    info:
+      path: ios/OttoMac/Info.plist
+      properties:
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        HermesDefaultHost: "$(OTTO_DEFAULT_HOST)"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes.mac
+        PRODUCT_NAME: Otto
+        PRODUCT_MODULE_NAME: Otto
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Otto"
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
+        INFOPLIST_KEY_NSHumanReadableCopyright: ""
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Talk to your agent in voice mode and dictate messages."
+        INFOPLIST_KEY_NSSpeechRecognitionUsageDescription: "Turns what you say into text for your agent."
+        INFOPLIST_KEY_NSLocalNetworkUsageDescription: "Otto connects to your agent server on your network."
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        CODE_SIGN_ENTITLEMENTS: ios/OttoMac/OttoMac.entitlements
+        # Manual: keychain-access-groups needs a provisioning profile and Xcode here has no Apple
+        # account, so automatic signing can't make one. The API-made profiles come from
+        # scripts/dev_profiles.py (MAC_BUNDLES); release_mac.sh overrides these for the store.
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "Apple Development"
+        PROVISIONING_PROFILE_SPECIFIER: "ai.elier.hermes.mac Development"
+        ENABLE_HARDENED_RUNTIME: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: MacAppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: MacAccent
+        COMBINE_HIDPI_IMAGES: YES
+      configs:
+        # Debug runs (screenshots, tests, scratch builds) are a separate app, "Otto Dev", so they can
+        # never replace or be mistaken for John's installed Otto (docs/release.md).
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes.mac.dev
+          INFOPLIST_KEY_CFBundleDisplayName: "Otto Dev"
+          PROVISIONING_PROFILE_SPECIFIER: "ai.elier.hermes.mac.dev Development"
+
+  OttoMacTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "26.0"
+    sources: [ios/OttoMacTests]
+    dependencies: [{target: OttoMac}]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes.mac.tests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_STYLE: Automatic
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Otto.app/Contents/MacOS/Otto"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+
+  HermesTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [ios/HermesTests]
+    dependencies: [{target: Hermes}]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes.tests
+        GENERATE_INFOPLIST_FILE: YES
+  HermesUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [ios/HermesUITests]
+    dependencies: [{target: Hermes}]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ai.elier.hermes.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Hermes
+schemes:
+  HermesShareUITest:
+    build: {targets: {Hermes: all, HermesUITests: [test]}}
+    test: {targets: [HermesUITests]}
+  HermesTV:
+    build: {targets: {HermesTV: all}}
+  Hermes:
+    build: {targets: {Hermes: all}}
+    test: {targets: [HermesTests]}
+  OttoMac:
+    build: {targets: {OttoMac: all}}
+    test: {targets: [OttoMacTests]}

@@ -1,0 +1,38 @@
+{
+  "schema": "EventRecord",
+  "value": {
+    "seq": 40,
+    "repo": "weft-demo",
+    "status": "accepted",
+    "kind": "revert",
+    "ts": "2026-10-05T15:20:00.000Z",
+    "actor": {
+      "type": "system",
+      "id": "revert-workflow"
+    },
+    "agent": "claude-a",
+    "change": "I4f2a",
+    "base_seq": 39,
+    "files": [
+      "src/auth/session.ts"
+    ],
+    "reads": [],
+    "writes": [
+      {
+        "key": "src/auth/session.ts#refreshToken",
+        "kind": "signature"
+      }
+    ],
+    "summary": "reverted #31: error spike after landing",
+    "diagnostics": [],
+    "payload": {
+      "op_id": "op_000040",
+      "reverts_seq": 31,
+      "reason": "error spike after landing",
+      "requested_by": {
+        "type": "human",
+        "id": "john"
+      }
+    }
+  }
+}

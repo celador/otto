@@ -1,0 +1,9 @@
+{
+  "schema": "HumanAction",
+  "value": {
+    "type": "action",
+    "action": "approve",
+    "change": "I4f2a",
+    "note": "screenshots look right"
+  }
+}

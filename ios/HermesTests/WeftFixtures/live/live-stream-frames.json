@@ -1,0 +1,126 @@
+[
+ {
+  "type": "auth.ok",
+  "re": "auth"
+ },
+ {
+  "type": "event",
+  "event": {
+   "seq": 38,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "checkpoint",
+   "ts": "2026-10-04T03:20:13.629Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s7",
+   "base_seq": 37,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "codex-b pushed checkpoint b81d07c",
+   "diagnostics": [],
+   "payload": {
+    "sha": "b81d07c3",
+    "ref": "refs/weft/I-b",
+    "x_task_title": "Retry 401s in fetchWithAuth",
+    "x_evidence": {
+     "preview_url": "https://i-b.preview.example.dev",
+     "tests": {
+      "passed": 146,
+      "failed": 2,
+      "total": 148
+     },
+     "review": {
+      "verdict": "changes",
+      "summary": "Two auth tests fail when the refresh endpoint is slow."
+     },
+     "cost_usd": 0.31
+    }
+   }
+  }
+ },
+ {
+  "type": "event",
+  "event": {
+   "seq": 39,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:20:13.952Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s8",
+   "base_seq": 38,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "gemini-c joined (gemini-cli, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "gemini-cli",
+    "level": 3
+   }
+  }
+ },
+ {
+  "type": "event",
+  "event": {
+   "seq": 40,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "checkpoint",
+   "ts": "2026-10-04T03:20:14.255Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s8",
+   "base_seq": 39,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "gemini-c pushed checkpoint 7c3e5a9",
+   "diagnostics": [],
+   "payload": {
+    "sha": "7c3e5a90",
+    "ref": "refs/weft/I-c",
+    "x_task_title": "Cache refreshed sessions",
+    "x_evidence": {
+     "tests": {
+      "passed": 148,
+      "failed": 0,
+      "total": 148
+     },
+     "cost_usd": 0.18
+    }
+   }
+  }
+ },
+ {
+  "type": "replay.done",
+  "head_seq": 40
+ },
+ {
+  "type": "ping",
+  "head_seq": 40
+ }
+]

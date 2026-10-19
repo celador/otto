@@ -1,0 +1,7 @@
+{
+  "schema": "StreamFrame",
+  "value": {
+    "type": "ping",
+    "head_seq": 20
+  }
+}

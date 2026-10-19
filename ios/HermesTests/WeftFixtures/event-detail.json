@@ -1,0 +1,46 @@
+{
+  "schema": "EventRecord",
+  "value": {
+    "seq": 12,
+    "repo": "weft-demo",
+    "status": "accepted",
+    "kind": "edit",
+    "ts": "2026-10-05T14:03:11.204Z",
+    "actor": {
+      "type": "agent",
+      "id": "claude-a",
+      "harness": "claude-code"
+    },
+    "agent": "claude-a",
+    "task": "T-1",
+    "change": "I4f2a",
+    "session": "s1",
+    "base_seq": 9,
+    "mode": "commit",
+    "files": [
+      "src/auth/session.ts"
+    ],
+    "reads": [
+      "src/auth/session.ts#RefreshOpts"
+    ],
+    "writes": [
+      {
+        "key": "src/auth/session.ts#refreshToken",
+        "kind": "signature"
+      }
+    ],
+    "diff": "diff --git a/src/auth/session.ts b/src/auth/session.ts\n--- a/src/auth/session.ts\n+++ b/src/auth/session.ts\n@@ -10,3 +10,3 @@\n-export async function refreshToken(token: string) {\n+export async function refreshToken(token: string, opts: RefreshOpts) {\n",
+    "intent": "add a retry budget to token refresh",
+    "summary": "claude-a changed signature of refreshToken in src/auth/session.ts — add a retry budget to token refresh",
+    "diagnostics": [],
+    "tool": {
+      "name": "Edit",
+      "call_id": "toolu_01",
+      "harness_event": "PostToolUse"
+    },
+    "transcript": {
+      "uri": "r2://weft-transcripts/I4f2a/claude-a.jsonl",
+      "offset": 1824
+    }
+  }
+}

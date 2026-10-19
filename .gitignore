@@ -1,0 +1,8 @@
+*.xcodeproj/
+build/
+DerivedData/
+.DS_Store
+*.ipa
+__pycache__/
+.worktrees/
+Config/Local.xcconfig

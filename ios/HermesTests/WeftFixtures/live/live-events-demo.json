@@ -1,0 +1,1202 @@
+{
+ "type": "events",
+ "repo": "ios-demo",
+ "events": [
+  {
+   "seq": 1,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:14:41.550Z",
+   "actor": {
+    "type": "agent",
+    "id": "claude-a",
+    "harness": "claude-code"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "session": "s1",
+   "base_seq": 0,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "claude-a joined (claude-code, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "claude-code",
+    "level": 3
+   }
+  },
+  {
+   "seq": 2,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:14:41.873Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s2",
+   "base_seq": 1,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "codex-b joined (codex, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "codex",
+    "level": 3
+   }
+  },
+  {
+   "seq": 3,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:14:42.177Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s3",
+   "base_seq": 2,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "gemini-c joined (gemini-cli, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "gemini-cli",
+    "level": 3
+   }
+  },
+  {
+   "seq": 4,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "claim",
+   "ts": "2026-10-04T03:14:42.490Z",
+   "actor": {
+    "type": "agent",
+    "id": "claude-a",
+    "harness": "claude-code"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "session": "s1",
+   "base_seq": 1,
+   "mode": "commit",
+   "files": [
+    "src/auth/session.ts"
+   ],
+   "reads": [],
+   "writes": [
+    {
+     "key": "src/auth/session.ts#refreshToken",
+     "kind": "signature"
+    }
+   ],
+   "summary": "claude-a firmly claimed refreshToken",
+   "diagnostics": [],
+   "payload": {
+    "firm": true,
+    "source": "explicit",
+    "ttl_ms": 600000
+   }
+  },
+  {
+   "seq": 5,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "intent",
+   "ts": "2026-10-04T03:14:42.675Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s2",
+   "base_seq": 2,
+   "mode": "commit",
+   "files": [
+    "src/api/client.ts"
+   ],
+   "reads": [
+    "src/auth/session.ts#refreshToken"
+   ],
+   "writes": [
+    {
+     "key": "src/api/client.ts#fetchWithAuth",
+     "kind": "body"
+    }
+   ],
+   "intent": "retry 401s once",
+   "summary": "codex-b plans \u2014 retry 401s once",
+   "diagnostics": []
+  },
+  {
+   "seq": 6,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "edit",
+   "ts": "2026-10-04T03:14:42.868Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s2",
+   "base_seq": 5,
+   "mode": "commit",
+   "files": [
+    "src/api/client.ts"
+   ],
+   "reads": [
+    "src/auth/session.ts#refreshToken"
+   ],
+   "writes": [
+    {
+     "key": "src/api/client.ts#fetchWithAuth",
+     "kind": "body"
+    }
+   ],
+   "intent": "retry 401s once",
+   "summary": "codex-b edited fetchWithAuth in src/api/client.ts \u2014 retry 401s once",
+   "diagnostics": [],
+   "has_diff": true
+  },
+  {
+   "seq": 7,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "edit",
+   "ts": "2026-10-04T03:14:43.053Z",
+   "actor": {
+    "type": "agent",
+    "id": "claude-a",
+    "harness": "claude-code"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "session": "s1",
+   "base_seq": 4,
+   "mode": "commit",
+   "files": [
+    "src/auth/session.ts"
+   ],
+   "reads": [],
+   "writes": [
+    {
+     "key": "src/auth/session.ts#refreshToken",
+     "kind": "signature"
+    },
+    {
+     "key": "src/auth/session.ts#RefreshOpts",
+     "kind": "new"
+    }
+   ],
+   "intent": "add a retry budget to refreshToken",
+   "summary": "claude-a changed signature of refreshToken, added RefreshOpts in src/auth/session.ts \u2014 add a retry budget to refreshToken",
+   "diagnostics": [],
+   "has_diff": true
+  },
+  {
+   "seq": 8,
+   "repo": "ios-demo",
+   "status": "rejected",
+   "kind": "edit",
+   "ts": "2026-10-04T03:14:43.247Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s2",
+   "base_seq": 6,
+   "mode": "commit",
+   "files": [
+    "src/api/client.ts"
+   ],
+   "reads": [
+    "src/auth/session.ts#refreshToken"
+   ],
+   "writes": [
+    {
+     "key": "src/api/client.ts#fetchWithAuth",
+     "kind": "body"
+    }
+   ],
+   "intent": "use the fresh token on retry",
+   "summary": "Blocked: codex-b edited fetchWithAuth in src/api/client.ts \u2014 use the fresh token on retry",
+   "diagnostics": [
+    {
+     "severity": "error",
+     "code": "stale_assumption",
+     "file": "src/auth/session.ts",
+     "symbol": "src/auth/session.ts#refreshToken",
+     "message": "You use src/auth/session.ts#refreshToken, whose signature changed in #7 by claude-a after your base #6.",
+     "suggestion": "Read the new src/auth/session.ts#refreshToken (event #7) and update this call site, or negotiate with claude-a.",
+     "caused_by_seq": 7,
+     "caused_by_agent": "claude-a",
+     "caused_by_task": "T-1"
+    }
+   ]
+  },
+  {
+   "seq": 9,
+   "repo": "ios-demo",
+   "status": "rejected",
+   "kind": "edit",
+   "ts": "2026-10-04T03:14:43.550Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s3",
+   "base_seq": 3,
+   "mode": "commit",
+   "files": [
+    "src/auth/session.ts"
+   ],
+   "reads": [
+    "src/auth/session.ts#refreshToken"
+   ],
+   "writes": [
+    {
+     "key": "src/auth/session.ts#SessionStore.get",
+     "kind": "body"
+    }
+   ],
+   "intent": "retry refresh 3 times in SessionStore.get",
+   "summary": "Blocked: gemini-c edited SessionStore.get in src/auth/session.ts \u2014 retry refresh 3 times in SessionStore.get",
+   "diagnostics": [
+    {
+     "severity": "error",
+     "code": "stale_assumption",
+     "file": "src/auth/session.ts",
+     "symbol": "src/auth/session.ts#refreshToken",
+     "message": "You use src/auth/session.ts#refreshToken, whose signature changed in #7 by claude-a after your base #3.",
+     "suggestion": "Read the new src/auth/session.ts#refreshToken (event #7) and update this call site, or negotiate with claude-a.",
+     "caused_by_seq": 7,
+     "caused_by_agent": "claude-a",
+     "caused_by_task": "T-1"
+    }
+   ]
+  },
+  {
+   "seq": 10,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "negotiate.propose",
+   "ts": "2026-10-04T03:14:43.744Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s2",
+   "base_seq": 8,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "codex-b \u2192 claude-a: proposes overload on refreshToken",
+   "diagnostics": [],
+   "payload": {
+    "to": {
+     "agent": "claude-a"
+    },
+    "keys": [
+     "src/auth/session.ts#refreshToken"
+    ],
+    "terms": {
+     "kind": "overload",
+     "text": "Keep refreshToken(token) as an overload so my callers compile."
+    }
+   }
+  },
+  {
+   "seq": 11,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "negotiate.accept",
+   "ts": "2026-10-04T03:14:44.132Z",
+   "actor": {
+    "type": "agent",
+    "id": "claude-a",
+    "harness": "claude-code"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "session": "s1",
+   "base_seq": 10,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "claude-a accepted #10",
+   "diagnostics": [],
+   "payload": {
+    "reply_to": 10
+   }
+  },
+  {
+   "seq": 12,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "edit",
+   "ts": "2026-10-04T03:14:44.317Z",
+   "actor": {
+    "type": "agent",
+    "id": "claude-a",
+    "harness": "claude-code"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "session": "s1",
+   "base_seq": 11,
+   "mode": "commit",
+   "files": [
+    "src/auth/session.ts"
+   ],
+   "reads": [],
+   "writes": [
+    {
+     "key": "src/auth/session.ts#refreshToken",
+     "kind": "body"
+    }
+   ],
+   "intent": "keep refreshToken(token) callers compiling (negotiated)",
+   "summary": "claude-a edited refreshToken in src/auth/session.ts \u2014 keep refreshToken(token) callers compiling (negotiated)",
+   "diagnostics": [],
+   "has_diff": true
+  },
+  {
+   "seq": 13,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "edit",
+   "ts": "2026-10-04T03:14:44.693Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s2",
+   "base_seq": 12,
+   "mode": "commit",
+   "files": [
+    "src/api/client.ts"
+   ],
+   "reads": [
+    "src/auth/session.ts#refreshToken"
+   ],
+   "writes": [
+    {
+     "key": "src/api/client.ts#fetchWithAuth",
+     "kind": "body"
+    }
+   ],
+   "intent": "pass { retries: 1 } to refreshToken",
+   "summary": "codex-b edited fetchWithAuth in src/api/client.ts \u2014 pass { retries: 1 } to refreshToken",
+   "diagnostics": [],
+   "has_diff": true
+  },
+  {
+   "seq": 14,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "checkpoint",
+   "ts": "2026-10-04T03:14:44.959Z",
+   "actor": {
+    "type": "agent",
+    "id": "claude-a",
+    "harness": "claude-code"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "session": "s1",
+   "base_seq": 12,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "claude-a pushed checkpoint 4f2c9e1",
+   "diagnostics": [],
+   "payload": {
+    "sha": "4f2c9e1a",
+    "ref": "refs/weft/I-a"
+   }
+  },
+  {
+   "seq": 15,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "checkpoint",
+   "ts": "2026-10-04T03:14:45.139Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s2",
+   "base_seq": 13,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "codex-b pushed checkpoint b81d07c",
+   "diagnostics": [],
+   "payload": {
+    "sha": "b81d07c3",
+    "ref": "refs/weft/I-b"
+   }
+  },
+  {
+   "seq": 16,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "control",
+   "ts": "2026-10-04T03:14:45.448Z",
+   "actor": {
+    "type": "human",
+    "id": "reviewer"
+   },
+   "base_seq": 15,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "reviewer approved I-a",
+   "diagnostics": [],
+   "payload": {
+    "action": "approve",
+    "target": {
+     "change": "I-a"
+    },
+    "reason": "tests green, ship it"
+   }
+  },
+  {
+   "seq": 17,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "land",
+   "ts": "2026-10-04T03:14:46.041Z",
+   "actor": {
+    "type": "system",
+    "id": "land-workflow"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "base_seq": 16,
+   "files": [
+    "src/auth/session.ts"
+   ],
+   "reads": [],
+   "writes": [
+    {
+     "key": "src/auth/session.ts#refreshToken",
+     "kind": "signature"
+    },
+    {
+     "key": "src/auth/session.ts#RefreshOpts",
+     "kind": "new"
+    }
+   ],
+   "summary": "claude-a landed I-a (2 symbols)",
+   "diagnostics": [],
+   "payload": {
+    "sha": "4f2c9e1a",
+    "op_id": "op_1791083685836"
+   }
+  },
+  {
+   "seq": 18,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "message",
+   "ts": "2026-10-04T03:14:46.269Z",
+   "actor": {
+    "type": "human",
+    "id": "reviewer"
+   },
+   "base_seq": 17,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "reviewer \u2192 codex-b: Use the overload for now; drop the manual retry loop.",
+   "diagnostics": [],
+   "payload": {
+    "to": {
+     "agent": "codex-b"
+    },
+    "text": "Use the overload for now; drop the manual retry loop.",
+    "intent": "steer"
+   }
+  },
+  {
+   "seq": 19,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:16:59.874Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s4",
+   "base_seq": 18,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "gemini-c joined (gemini-cli, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "gemini-cli",
+    "level": 3
+   }
+  },
+  {
+   "seq": 20,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "intent",
+   "ts": "2026-10-04T03:17:00.269Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s4",
+   "base_seq": 19,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "intent": "cache the refreshed session for 30 s",
+   "summary": "gemini-c plans \u2014 cache the refreshed session for 30 s",
+   "diagnostics": []
+  },
+  {
+   "seq": 21,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "edit",
+   "ts": "2026-10-04T03:17:02.479Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s4",
+   "base_seq": 20,
+   "mode": "commit",
+   "files": [
+    "src/auth/session.ts"
+   ],
+   "reads": [],
+   "writes": [
+    {
+     "key": "src/auth/session.ts#SessionStore.get",
+     "kind": "body"
+    }
+   ],
+   "intent": "cache the refreshed session for 30 s",
+   "summary": "gemini-c edited SessionStore.get in src/auth/session.ts \u2014 cache the refreshed session for 30 s",
+   "diagnostics": []
+  },
+  {
+   "seq": 22,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:17:08.727Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s5",
+   "base_seq": 21,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "gemini-c joined (gemini-cli, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "gemini-cli",
+    "level": 3
+   }
+  },
+  {
+   "seq": 23,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "intent",
+   "ts": "2026-10-04T03:17:09.130Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s5",
+   "base_seq": 22,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "intent": "cache the refreshed session for 30 s",
+   "summary": "gemini-c plans \u2014 cache the refreshed session for 30 s",
+   "diagnostics": []
+  },
+  {
+   "seq": 24,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "edit",
+   "ts": "2026-10-04T03:17:10.323Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s5",
+   "base_seq": 23,
+   "mode": "commit",
+   "files": [
+    "src/auth/session.ts"
+   ],
+   "reads": [],
+   "writes": [
+    {
+     "key": "src/auth/session.ts#SessionStore.get",
+     "kind": "body"
+    }
+   ],
+   "intent": "cache the refreshed session for 30 s",
+   "summary": "gemini-c edited SessionStore.get in src/auth/session.ts \u2014 cache the refreshed session for 30 s",
+   "diagnostics": []
+  },
+  {
+   "seq": 25,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "control",
+   "ts": "2026-10-04T03:17:49.690Z",
+   "actor": {
+    "type": "human",
+    "id": "reviewer"
+   },
+   "base_seq": 24,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "reviewer paused codex-b",
+   "diagnostics": [],
+   "payload": {
+    "action": "pause",
+    "target": {
+     "agent": "codex-b"
+    },
+    "reason": "wrong approach"
+   }
+  },
+  {
+   "seq": 26,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "message",
+   "ts": "2026-10-04T03:17:55.275Z",
+   "actor": {
+    "type": "human",
+    "id": "reviewer"
+   },
+   "base_seq": 25,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "reviewer \u2192 codex-b: Use RefreshOpts instead of a manual loop",
+   "diagnostics": [],
+   "payload": {
+    "to": {
+     "agent": "codex-b"
+    },
+    "text": "Use RefreshOpts instead of a manual loop",
+    "intent": "steer"
+   }
+  },
+  {
+   "seq": 27,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "control",
+   "ts": "2026-10-04T03:18:01.287Z",
+   "actor": {
+    "type": "human",
+    "id": "reviewer"
+   },
+   "base_seq": 26,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "reviewer resumed codex-b",
+   "diagnostics": [],
+   "payload": {
+    "action": "resume",
+    "target": {
+     "agent": "codex-b"
+    }
+   }
+  },
+  {
+   "seq": 28,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "control",
+   "ts": "2026-10-04T03:18:07.177Z",
+   "actor": {
+    "type": "human",
+    "id": "reviewer"
+   },
+   "base_seq": 27,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "reviewer approved I-b",
+   "diagnostics": [],
+   "payload": {
+    "action": "approve",
+    "target": {
+     "change": "I-b"
+    },
+    "reason": "ok to land"
+   }
+  },
+  {
+   "seq": 29,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "land",
+   "ts": "2026-10-04T03:18:10.316Z",
+   "actor": {
+    "type": "system",
+    "id": "land-workflow"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "base_seq": 28,
+   "files": [
+    "src/api/client.ts"
+   ],
+   "reads": [],
+   "writes": [
+    {
+     "key": "src/api/client.ts#fetchWithAuth",
+     "kind": "body"
+    }
+   ],
+   "summary": "codex-b landed I-b (1 symbol)",
+   "diagnostics": [],
+   "payload": {
+    "sha": "9b205845",
+    "op_id": "op_1791083890087"
+   }
+  },
+  {
+   "seq": 30,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "control",
+   "ts": "2026-10-04T03:18:22.688Z",
+   "actor": {
+    "type": "human",
+    "id": "reviewer"
+   },
+   "base_seq": 29,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "reviewer requested undo of #29",
+   "diagnostics": [],
+   "payload": {
+    "action": "undo",
+    "target": {
+     "seq": 29,
+     "op_id": "op_1791083890087"
+    },
+    "reason": "error spike after landing"
+   }
+  },
+  {
+   "seq": 31,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "revert",
+   "ts": "2026-10-04T03:18:42.742Z",
+   "actor": {
+    "type": "system",
+    "id": "land-workflow"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "base_seq": 30,
+   "files": [
+    "src/api/client.ts"
+   ],
+   "reads": [],
+   "writes": [
+    {
+     "key": "src/api/client.ts#fetchWithAuth",
+     "kind": "body"
+    }
+   ],
+   "summary": "reverted #29: error spike after landing",
+   "diagnostics": [],
+   "payload": {
+    "op_id": "op_1791083922530",
+    "reverts_seq": 29,
+    "reason": "error spike after landing",
+    "requested_by": {
+     "type": "human",
+     "id": "reviewer"
+    }
+   }
+  },
+  {
+   "seq": 32,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "leave",
+   "ts": "2026-10-04T03:19:43.550Z",
+   "actor": {
+    "type": "system",
+    "id": "coordinator"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s3",
+   "base_seq": 31,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "intent": "session expired",
+   "summary": "gemini-c left \u2014 session expired",
+   "diagnostics": [],
+   "payload": {
+    "harness": "gemini-cli",
+    "level": 3
+   }
+  },
+  {
+   "seq": 33,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "leave",
+   "ts": "2026-10-04T03:19:44.959Z",
+   "actor": {
+    "type": "system",
+    "id": "coordinator"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "session": "s1",
+   "base_seq": 32,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "intent": "session expired",
+   "summary": "claude-a left \u2014 session expired",
+   "diagnostics": [],
+   "payload": {
+    "harness": "claude-code",
+    "level": 3
+   }
+  },
+  {
+   "seq": 34,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "leave",
+   "ts": "2026-10-04T03:19:45.139Z",
+   "actor": {
+    "type": "system",
+    "id": "coordinator"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s2",
+   "base_seq": 33,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "intent": "session expired",
+   "summary": "codex-b left \u2014 session expired",
+   "diagnostics": [],
+   "payload": {
+    "harness": "codex",
+    "level": 3
+   }
+  },
+  {
+   "seq": 35,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:20:12.617Z",
+   "actor": {
+    "type": "agent",
+    "id": "claude-a",
+    "harness": "claude-code"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "session": "s6",
+   "base_seq": 34,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "claude-a joined (claude-code, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "claude-code",
+    "level": 3
+   }
+  },
+  {
+   "seq": 36,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "checkpoint",
+   "ts": "2026-10-04T03:20:12.995Z",
+   "actor": {
+    "type": "agent",
+    "id": "claude-a",
+    "harness": "claude-code"
+   },
+   "agent": "claude-a",
+   "task": "T-1",
+   "change": "I-a",
+   "session": "s6",
+   "base_seq": 35,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "claude-a pushed checkpoint 4f2c9e1",
+   "diagnostics": [],
+   "payload": {
+    "sha": "4f2c9e1a",
+    "ref": "refs/weft/I-a",
+    "x_task_title": "Retry budget for token refresh",
+    "x_evidence": {
+     "preview_url": "https://i-a.preview.example.dev",
+     "tests": {
+      "passed": 148,
+      "failed": 0,
+      "total": 148
+     },
+     "review": {
+      "verdict": "approve",
+      "summary": "Retry budget is bounded; overload keeps old callers compiling."
+     },
+     "cost_usd": 0.42
+    }
+   }
+  },
+  {
+   "seq": 37,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:20:13.326Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s7",
+   "base_seq": 36,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "codex-b joined (codex, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "codex",
+    "level": 3
+   }
+  },
+  {
+   "seq": 38,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "checkpoint",
+   "ts": "2026-10-04T03:20:13.629Z",
+   "actor": {
+    "type": "agent",
+    "id": "codex-b",
+    "harness": "codex"
+   },
+   "agent": "codex-b",
+   "task": "T-2",
+   "change": "I-b",
+   "session": "s7",
+   "base_seq": 37,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "codex-b pushed checkpoint b81d07c",
+   "diagnostics": [],
+   "payload": {
+    "sha": "b81d07c3",
+    "ref": "refs/weft/I-b",
+    "x_task_title": "Retry 401s in fetchWithAuth",
+    "x_evidence": {
+     "preview_url": "https://i-b.preview.example.dev",
+     "tests": {
+      "passed": 146,
+      "failed": 2,
+      "total": 148
+     },
+     "review": {
+      "verdict": "changes",
+      "summary": "Two auth tests fail when the refresh endpoint is slow."
+     },
+     "cost_usd": 0.31
+    }
+   }
+  },
+  {
+   "seq": 39,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "join",
+   "ts": "2026-10-04T03:20:13.952Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s8",
+   "base_seq": 38,
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "gemini-c joined (gemini-cli, L3)",
+   "diagnostics": [],
+   "payload": {
+    "harness": "gemini-cli",
+    "level": 3
+   }
+  },
+  {
+   "seq": 40,
+   "repo": "ios-demo",
+   "status": "accepted",
+   "kind": "checkpoint",
+   "ts": "2026-10-04T03:20:14.255Z",
+   "actor": {
+    "type": "agent",
+    "id": "gemini-c",
+    "harness": "gemini-cli"
+   },
+   "agent": "gemini-c",
+   "task": "T-3",
+   "change": "I-c",
+   "session": "s8",
+   "base_seq": 39,
+   "mode": "commit",
+   "files": [],
+   "reads": [],
+   "writes": [],
+   "summary": "gemini-c pushed checkpoint 7c3e5a9",
+   "diagnostics": [],
+   "payload": {
+    "sha": "7c3e5a90",
+    "ref": "refs/weft/I-c",
+    "x_task_title": "Cache refreshed sessions",
+    "x_evidence": {
+     "tests": {
+      "passed": 148,
+      "failed": 0,
+      "total": 148
+     },
+     "cost_usd": 0.18
+    }
+   }
+  }
+ ],
+ "head_seq": 40,
+ "next_after": 40,
+ "has_more": false
+}

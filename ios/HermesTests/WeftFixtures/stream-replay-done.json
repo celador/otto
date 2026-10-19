@@ -1,0 +1,7 @@
+{
+  "schema": "StreamFrame",
+  "value": {
+    "type": "replay.done",
+    "head_seq": 20
+  }
+}

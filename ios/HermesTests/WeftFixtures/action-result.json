@@ -1,0 +1,31 @@
+{
+  "schema": "ActionResult",
+  "value": {
+    "type": "action.result",
+    "seq": 21,
+    "record": {
+      "seq": 21,
+      "repo": "weft-demo",
+      "status": "accepted",
+      "kind": "control",
+      "ts": "2026-10-05T14:05:00.000Z",
+      "actor": {
+        "type": "human",
+        "id": "john"
+      },
+      "base_seq": 20,
+      "files": [],
+      "reads": [],
+      "writes": [],
+      "summary": "john paused codex-b",
+      "diagnostics": [],
+      "payload": {
+        "action": "pause",
+        "target": {
+          "agent": "codex-b"
+        },
+        "reason": "wrong approach"
+      }
+    }
+  }
+}

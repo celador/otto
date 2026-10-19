@@ -1,0 +1,27 @@
+{
+ "type": "repos",
+ "repos": [
+  {
+   "repo": "ios-demo",
+   "head_seq": 40,
+   "active_agents": 3,
+   "active_changes": 3,
+   "open_conflicts": 0,
+   "last_event_at": "2026-10-04T03:20:14.255Z",
+   "policy": {
+    "arbitration": "wound-wait"
+   }
+  },
+  {
+   "repo": "ios-site",
+   "head_seq": 12,
+   "active_agents": 1,
+   "active_changes": 1,
+   "open_conflicts": 0,
+   "last_event_at": "2026-10-04T03:20:28.102Z",
+   "policy": {
+    "arbitration": "wound-wait"
+   }
+  }
+ ]
+}
