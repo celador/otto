@@ -447,6 +447,16 @@ class Companion:
     def awake(self):
         return Companion._awake_controller()
 
+    _netwatch = None
+
+    @property
+    def netwatch(self):
+        """One Netwatch per relay (its setup job lives on it)."""
+        if Companion._netwatch is None:
+            import netwatch
+            Companion._netwatch = netwatch.Netwatch()
+        return Companion._netwatch
+
     @property
     def workspaces(self):
         if self._workspaces is None:
@@ -628,6 +638,22 @@ class Companion:
             try:
                 return self.awake.start_setup(sub.rsplit("/", 1)[1])
             except awake.AwakeError as e:
+                raise RouteError(e.status, e.detail) from None
+
+        # --- hotspot failover (netwatch.py → the otto-netwatch helper): join the iPhone hotspot when Wi-Fi dies ---
+        if sub in ("/hotspot", "/hotspot/test", "/hotspot/setup", "/hotspot/undo"):
+            import netwatch
+            try:
+                if sub == "/hotspot" and method == "GET":
+                    return self.netwatch.status()
+                if method != "POST":
+                    raise RouteError(405, "method not allowed")
+                if sub == "/hotspot":
+                    return self.netwatch.set(body)
+                if sub == "/hotspot/test":
+                    return self.netwatch.test()
+                return self.netwatch.start_setup(sub.rsplit("/", 1)[1])
+            except netwatch.NetwatchError as e:
                 raise RouteError(e.status, e.detail) from None
 
         if sub == "/weft/config":

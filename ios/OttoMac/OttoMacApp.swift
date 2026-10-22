@@ -10,6 +10,7 @@ struct OttoMacApp: App {
         // Keep Mac awake polls the relay for agent activity even with no window open. Its controls live
         // in Otto's window (sidebar footer), View → Keep Mac Awake and Settings; no menu bar item.
         KeepAwakeController.shared.start { [weak m] in m?.companionClient }
+        HotspotController.shared.start { [weak m] in m?.companionClient }
         // Headphone button: registered once, before any audio input starts, for the app's lifetime
         // (AirPods press in voice mode = send / interrupt; idle double press = start voice).
         HeadphoneHub.shared.onIdleStart = { HeadphoneVoiceStart.start() }

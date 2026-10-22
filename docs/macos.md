@@ -129,6 +129,20 @@ password, and Otto shows "Done", "Cancelled. Nothing was changed." or the error.
 (Settings → Keep Awake) calls `/undo` the same way. App Review wording: docs/app-store/review-note-keep-awake.md.
 Tests: `OttoMacTests` (scheme OttoMac → test).
 
+## iPhone hotspot failover
+
+Settings → Hotspot. When Wi-Fi stops reaching the internet (~25 s, so blips are ignored), the Mac joins the
+iPhone's Personal Hotspot; it switches back once the original Wi-Fi has worked for 2 min. The sandboxed app can't
+change networks, so a helper does it: **otto-netwatch** (`netwatch/`), a LaunchAgent the relay installs with
+"Set Up" (`POST /hermes/hotspot/setup` → `scripts/install_netwatch.sh`, no admin prompt). Otto shows the helper's
+status and edits its settings (on/off, hotspot name, password → login Keychain via the helper, Test Now) through
+`/hermes/hotspot` (relay/README.md). Works with the lid closed and with or without Keep Awake. Ported from
+Insomnia's hotspot handoff (THIRD_PARTY_NOTICES.md); its tmux "continue" nudge is left out.
+
+One-time on the Mac: Location Services on (System Settings → Privacy & Security → Location Services) and allowed
+for "Otto Network Helper", so it can read Wi-Fi names; System Settings → Wi-Fi → "Ask to join hotspots" →
+Automatic. On the iPhone: Personal Hotspot → "Allow Others to Join" on.
+
 ## Keyboard
 
 ⌘N new chat (in the workspace you're in) · ⇧⌘N new window · ⇧⌘B / ⇧⌘U board / usage pane · ⌘[ / Esc exit workspace · Return send · Shift-Return newline · ⌘K / ⌘L focus composer ·

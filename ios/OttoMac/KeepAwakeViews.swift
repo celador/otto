@@ -49,7 +49,7 @@ extension KeepAwakeController {
 }
 
 enum MacSettingsTab: String {
-    case general, connection, keepAwake
+    case general, connection, keepAwake, hotspot
     static let key = "mac.settingsTab"
 }
 

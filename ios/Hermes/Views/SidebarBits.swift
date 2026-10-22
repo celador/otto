@@ -29,3 +29,19 @@ enum SessionDot {
         return colors[Int(h % UInt32(colors.count))]
     }
 }
+
+/// A row in one sidebar section, identified by section + item id.
+///
+/// The sidebars are one LazyVStack, and a chat can show in two sections at once (pinned and in its
+/// expanded workspace on Mac). Two rows with the same id in one lazy stack share a view, so the
+/// pinned copy picked up the workspace copy's leading indent. Scoping every id by its section keeps
+/// each row's identity, and its layout, its own.
+struct SidebarSectionRow<Item>: Identifiable {
+    let id: String
+    let item: Item
+
+    static func rows<S: Sequence>(_ items: S, section: String) -> [SidebarSectionRow<Item>]
+    where S.Element == Item, Item: Identifiable, Item.ID == String {
+        items.map { SidebarSectionRow(id: section + "/" + $0.id, item: $0) }
+    }
+}

@@ -55,6 +55,8 @@ struct WeftStripModel: Equatable {
         var cardTitle: String?
         var who: String = ""
         var badge: Badge?
+        /// This record's identity as a feed row (distinct from the same record in a card's trail).
+        var feedKey: RowKey { .feed(id) }
     }
 
     var editing: [Editing] = []
@@ -188,6 +190,33 @@ struct WeftStripModel: Equatable {
     func trail(for row: Editing) -> [Item] {
         let ids = Set(row.trail)
         return feed.filter { ids.contains($0.id) }
+    }
+
+    /// Identity of a rendered row. A card's trail rows are the same edit records as rows in the feed
+    /// below; both lists sit in one stack, so they need distinct identities or SwiftUI collapses the
+    /// duplicates and leaves a blank band under "Every edit · live".
+    enum RowKey: Hashable {
+        case trail(change: String, WeftEventID)
+        case feed(WeftEventID)
+    }
+
+    struct TrailRow: Identifiable, Equatable {
+        var change: String
+        var item: Item
+        var id: RowKey { .trail(change: change, item.id) }
+    }
+
+    /// The expansion under an "Editing now" card, keyed apart from the feed rows.
+    func trailRows(for row: Editing) -> [TrailRow] {
+        trail(for: row).map { TrailRow(change: row.change, item: $0) }
+    }
+
+    /// Every row key the strip renders, top to bottom (tests pin that none repeat).
+    func renderedKeys(expanded: Set<String>, shown: Int) -> [RowKey] {
+        var keys: [RowKey] = []
+        for card in editing where expanded.contains(card.change) { keys += trailRows(for: card).map(\.id) }
+        keys += feed.prefix(shown).map { .feed($0.id) }
+        return keys
     }
 
     nonisolated static func targetLabel(_ t: String) -> String {
@@ -369,6 +398,15 @@ struct WeftStripPanel: View {
             await store.refreshKnownRepos()
             if let repo { await store.ensureRepo(repo) }
             #if DEBUG
+            // Unattended screenshots: -weft.expandEditing YES expands every "Editing now" card (its trail),
+            // re-checked for 30 s so cards that arrive after the first page are expanded too.
+            if UserDefaults.standard.bool(forKey: "weft.expandEditing"), let repo {
+                for _ in 0..<30 {
+                    let changes = Set(WeftStripModel.make(events: store.log.events(repo: repo)).editing.map(\.change))
+                    if !changes.isSubset(of: expanded) { expanded.formUnion(changes) }
+                    try? await Task.sleep(for: .seconds(1))
+                }
+            }
             // Unattended screenshots: -weft.openEdit latest|<seq> opens that edit's detail (diff).
             if let s = UserDefaults.standard.string(forKey: "weft.openEdit"), let repo {
                 let d = UserDefaults.standard.double(forKey: "weft.openEditDelay")
@@ -472,7 +510,9 @@ struct WeftStripPanel: View {
             let model = WeftStripModel.make(events: events)
             let rows = Array(model.feed.prefix(shown))
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 1) {
+                // VStack, not LazyVStack: the feed is paged (`shown`), so laziness buys nothing, and a lazy
+                // stack on macOS keeps stale placeholder heights when rows animate in above others.
+                VStack(alignment: .leading, spacing: 1) {
                     if model.editing.isEmpty && model.feed.isEmpty {
                         Text(store.isLoading ? "Loading…" : "Nothing from Weft on \(repo) yet.")
                             .font(.caption).foregroundStyle(.secondary).padding(.horizontal, 12).padding(.vertical, 8)
@@ -482,15 +522,15 @@ struct WeftStripPanel: View {
                         ForEach(model.editing) { card in
                             editingRow(card)
                             if expanded.contains(card.change) {
-                                ForEach(model.trail(for: card)) { item in
-                                    feedRow(item).padding(.leading, 14)
+                                ForEach(model.trailRows(for: card)) { row in
+                                    feedRow(row.item).padding(.leading, 14)
                                 }
                             }
                         }
                     }
                     if !model.feed.isEmpty {
                         sectionLabel("Every edit · live")
-                        ForEach(rows) { item in
+                        ForEach(rows, id: \.feedKey) { item in
                             feedRow(item)
                                 .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .opacity), removal: .opacity))
                         }

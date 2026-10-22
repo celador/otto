@@ -132,5 +132,31 @@ closed.", Touch ID or password), and the backstop LaunchAgent is installed as th
   `idle_grace` 180): on battery below 40% Low Power Mode on, below 10% end; serious heat Low Power Mode, critical
   heat end. Low Power Mode is only touched when it was off (`powermode 0`); the user's own or High Power is left.
 - CLI: `python3 awake.py --status | --off`. Tests: `test_awake.py` (fake pmset runner + fake clock).
-- Adapted from Insomnia (MIT, see THIRD_PARTY_NOTICES.md); its app freezing, Docker, mute, brightness, hotspot
-  and tmux extras are not included.
+- Adapted from Insomnia (MIT, see THIRD_PARTY_NOTICES.md); its app freezing, Docker, mute, brightness and tmux
+  extras are not included. Its hotspot handoff is ported separately (below).
+
+### iPhone hotspot failover (`netwatch.py`, `GET/POST /hermes/hotspot`)
+
+When this Mac's Wi-Fi stops reaching the internet for ~25 s, join the iPhone Personal Hotspot; when the original
+Wi-Fi has been visible and working for 2 min, switch back. The work is done by **otto-netwatch** (`netwatch/`, Swift),
+a per-user LaunchAgent (`ai.elier.otto-netwatch`, no admin rights) installed by `scripts/install_netwatch.sh`
+(undo: `scripts/uninstall_netwatch.sh [--purge]`). The relay only reads/writes its files and starts the installer.
+
+- `GET /hermes/hotspot` → `{installed, running, enabled, hotspot_ssid, setup, link (wifi|hotspot|offline), phase
+  (watching|joining|on_hotspot|switching_back|testing), ssid, home_ssid, password_saved, location, last_failover,
+  last_switch_back, last_test, last_error, events[], test_pending}`.
+- `POST /hermes/hotspot {enabled?, hotspot_ssid?, password?}`: the password is piped to `otto-netwatch
+  set-password` on stdin (login Keychain, service `otto-hotspot`, item owned by the helper so it reads it without a
+  prompt); `""` clears it. Never written to a file, an argument, a log or a response.
+- `POST /hermes/hotspot/test`: writes `test-request`; the helper joins the hotspot, checks the internet, switches back.
+- `POST /hermes/hotspot/setup|undo`: runs the install/uninstall script in the background (`setup.state`).
+- POSTs refuse browser requests (Origin / Sec-Fetch-* headers), like `/hermes/awake/setup`.
+- Files: `~/.hermes/otto-netwatch/{config.json,status.json,netwatch.log}` (0600, dir 0700).
+- Online = `http://captive.apple.com/hotspot-detect.html` says Success or `https://1.1.1.1/cdn-cgi/trace` answers
+  (a captive portal counts as offline). Hotspot = its SSID or the 172.20.10.1 router every iPhone hotspot uses.
+- Backoff: failed joins wait 30 s, 1, 2, 5, then 10 min; a switch back that fails (or whose Wi-Fi dies again within
+  5 min) waits 5, 10, 20, 30, then 60 min. Never loops.
+- Location Services: macOS hides Wi-Fi names unless it's on (system-wide) and allowed for "Otto Network Helper".
+  Without it the helper still fails over, but can't tell which Wi-Fi to go back to, so after 10 min it cycles Wi-Fi
+  and lets macOS pick its preferred network (macOS ranks ordinary Wi-Fi above hotspots).
+- Tests: `test_netwatch.py`; the state machine: `cd netwatch && swift test` (fake network + clock).

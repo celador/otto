@@ -276,7 +276,8 @@ def make_handler(secrets: Secrets, relay_port: int = 8650):
             if not secrets.dashboard_token:
                 return self._send(503, {"detail": "dashboard token not configured"})
             query = dict(parse_qsl(parts.query))
-            if parts.path in ("/hermes/awake/setup", "/hermes/awake/undo"):
+            if parts.path in ("/hermes/awake/setup", "/hermes/awake/undo") or (
+                    parts.path.startswith("/hermes/hotspot") and self.command == "POST"):
                 # Starts a system administrator prompt on this Mac: native clients only, never a web page.
                 if any(k.lower() == "origin" or k.lower().startswith("sec-fetch-") for k in self.headers.keys()):
                     return self._send(403, {"detail": "not from a browser"})

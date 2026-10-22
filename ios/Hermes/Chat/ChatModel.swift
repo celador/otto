@@ -20,12 +20,15 @@ final class ChatModel {
     /// Set when this screen creates or renames the session.
     private(set) var title: String?
     /// Per-chat model override; nil = gateway default.
+    /// Only a real change is persisted: `init` assigns this (and `@Observable` runs didSet there too), and
+    /// a UserDefaults write per init fed an endless re-render on iPad (every write invalidates each
+    /// `@AppStorage` view, the workspace dashboard re-runs its chat closure, which builds a new ChatModel).
     var modelChoice: ModelChoice? {
-        didSet { if let sessionID { ModelPrefs.set(modelChoice, sessionID: sessionID) } }
+        didSet { if let sessionID, modelChoice != oldValue { ModelPrefs.set(modelChoice, sessionID: sessionID) } }
     }
     /// Per-chat Fast Mode; nil = never touched (Hermes's own setting applies).
     var fastMode: Bool? {
-        didSet { if let sessionID { FastPrefs.set(fastMode, sessionID: sessionID) } }
+        didSet { if let sessionID, fastMode != oldValue { FastPrefs.set(fastMode, sessionID: sessionID) } }
     }
     /// Set by the chat screen from the model's capabilities; fast is only sent when it exists.
     var fastAvailable = false
@@ -515,9 +518,11 @@ enum RunBookmark {
 enum FastPrefs {
     private static func key(_ sessionID: String) -> String { "fast.\(sessionID)" }
     static func get(sessionID: String) -> Bool? { UserDefaults.standard.object(forKey: key(sessionID)) as? Bool }
-    static func set(_ on: Bool?, sessionID: String) {
-        if let on { UserDefaults.standard.set(on, forKey: key(sessionID)) }
-        else { UserDefaults.standard.removeObject(forKey: key(sessionID)) }
+    /// Writes only when the stored value differs: any UserDefaults write invalidates every `@AppStorage` view.
+    static func set(_ on: Bool?, sessionID: String, defaults d: UserDefaults = .standard) {
+        let k = key(sessionID)
+        guard d.object(forKey: k) as? Bool != on else { return }
+        if let on { d.set(on, forKey: k) } else { d.removeObject(forKey: k) }
     }
 }
 
@@ -535,7 +540,9 @@ enum ModelPrefs {
     private static func decode(_ key: String) -> ModelChoice? {
         UserDefaults.standard.data(forKey: key).flatMap { try? JSONDecoder().decode(ModelChoice.self, from: $0) }
     }
+    /// Writes only when the stored value differs: any UserDefaults write invalidates every `@AppStorage` view.
     private static func encode(_ choice: ModelChoice?, _ key: String) {
+        guard decode(key) != choice || (choice == nil && UserDefaults.standard.object(forKey: key) != nil) else { return }
         if let choice, let data = try? JSONEncoder().encode(choice) {
             UserDefaults.standard.set(data, forKey: key)
         } else {

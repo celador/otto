@@ -392,6 +392,7 @@ struct MacShell: View {
         .help(folded ? "Show \(title)" : "Hide \(title)")
         .accessibilityLabel(title)
         .accessibilityValue(folded ? "Collapsed, \(count)" : "Expanded")
+        .id("section." + key)
     }
 
     private func isSelected(_ screen: Screen) -> Bool {
@@ -499,7 +500,8 @@ struct MacShell: View {
                     Text(workspaces.isKnownEmpty(id) ? "No chats here yet. Type below to start one, or drag a chat onto this workspace." : "Loading…")
                         .font(.system(size: 12)).foregroundStyle(.secondary).padding(.horizontal, 18)
                 }
-                ForEach(rows) { r in
+                ForEach(SidebarSectionRow.rows(rows, section: "workspace.\(id)")) { row in
+                    let r = row.item
                     chatRow(app.sessions.first(where: { $0.id == r.id }) ?? r.summary)
                 }
             }
@@ -513,6 +515,7 @@ struct MacShell: View {
     }
 
     private var allChatsSidebar: some View {
+        ScrollViewReader { proxy in
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 1) {
                 SidebarRow(title: "New chat", selected: { if case .newChat = route { return currentSessionID == nil && newChatWorkspace == nil } else { return false } }(),
@@ -526,7 +529,7 @@ struct MacShell: View {
                     if results.isEmpty {
                         Text("No chats match “\(query)”.").font(.system(size: 12)).foregroundStyle(.secondary).padding(.horizontal, 18)
                     }
-                    ForEach(results) { chatRow($0) }
+                    ForEach(SidebarSectionRow.rows(results, section: "results")) { chatRow($0.item) }
                 } else {
                     workspaceSection
                     menuSection
@@ -534,7 +537,7 @@ struct MacShell: View {
                     if !pinned.isEmpty {
                         sectionHeader("Pinned", icon: "pin.fill", key: "pinned", count: pinned.count,
                                       running: pinned.contains { app.runningSessionIDs.contains($0.id) })
-                        if !isCollapsed("pinned") { ForEach(pinned) { chatRow($0) } }
+                        if !isCollapsed("pinned") { ForEach(SidebarSectionRow.rows(pinned, section: "pinned")) { chatRow($0.item) } }
                     }
                     sectionHeader(workspaces.active.isEmpty ? "Recents" : "Other chats", icon: "clock", key: "recents",
                                   count: otherChats.count,
@@ -544,7 +547,7 @@ struct MacShell: View {
                             Text(chats.isEmpty ? "No chats yet" : "Every chat is in a workspace.")
                                 .font(.system(size: 12)).foregroundStyle(.secondary).padding(.horizontal, 18)
                         }
-                        ForEach(otherChats) { chatRow($0) }
+                        ForEach(SidebarSectionRow.rows(otherChats, section: "recents")) { chatRow($0.item) }
                     }
                 }
             }
@@ -552,6 +555,15 @@ struct MacShell: View {
             .padding(.bottom, 12)
         }
         .scrollIndicators(.automatic)
+        #if DEBUG
+        // Unattended screenshots of lower sections: -mac.sidebarScrollTo pinned|recents
+        .task {
+            guard let key = UserDefaults.standard.string(forKey: "mac.sidebarScrollTo") else { return }
+            try? await Task.sleep(for: .seconds(4))
+            proxy.scrollTo("section." + key, anchor: .top)
+        }
+        #endif
+        }
     }
 
     // MARK: Workspaces (first in the sidebar; a chevron shows a workspace's recent chats)
@@ -589,7 +601,8 @@ struct MacShell: View {
                     Text("No chats yet").font(.system(size: 11.5)).foregroundStyle(.tertiary)
                         .padding(.leading, 44).frame(height: 22)
                 }
-                ForEach(recent.prefix(5)) { r in
+                ForEach(SidebarSectionRow.rows(recent.prefix(5), section: "expanded.\(w.id)")) { row in
+                    let r = row.item
                     let s = app.sessions.first(where: { $0.id == r.id }) ?? r.summary
                     chatRow(s).padding(.leading, 14)
                 }
@@ -1095,6 +1108,9 @@ struct MacSettingsView: View {
             KeepAwakeSettings(awake: .shared)
                 .tabItem { Label("Keep Awake", systemImage: "cup.and.saucer") }
                 .tag(MacSettingsTab.keepAwake.rawValue)
+            HotspotSettings(hotspot: .shared)
+                .tabItem { Label("Hotspot", systemImage: "personalhotspot") }
+                .tag(MacSettingsTab.hotspot.rawValue)
         }
         .frame(width: 560, height: 640)
     }

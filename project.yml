@@ -14,7 +14,7 @@ settings:
     DEVELOPMENT_TEAM: UFF39H3A3T
     SWIFT_VERSION: "6.0"
     MARKETING_VERSION: "1.0"
-    CURRENT_PROJECT_VERSION: "92"
+    CURRENT_PROJECT_VERSION: "96"
 packages:
   # Ghostty's engine for the Terminal pane: libghostty + Swift views, with a host-managed I/O backend
   # (the shell runs on the Hermes host via the relay). Pinned; scripts/build_ghosttykit.sh rebuilds the

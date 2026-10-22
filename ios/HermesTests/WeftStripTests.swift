@@ -96,6 +96,25 @@ import Testing
         #expect(m.trail(for: a).allSatisfy { $0.task == "t_aaaaaaaa" })
     }
 
+    /// The blank band under "Every edit · live": an expanded card's trail rows are the same records as
+    /// feed rows in the same stack. Shared ids made SwiftUI collapse one copy into empty space.
+    @Test func expandedTrailRowsNeverShareAnIdentityWithFeedRows() {
+        let m = WeftStripModel.make(events: [
+            ev(1, "edit", minutesAgo: 9, files: ["slides.html"]),
+            ev(2, "edit", minutesAgo: 8, change: "hermes-backend/t_bbbbbbbb", task: "t_bbbbbbbb", files: ["x.py"], agent: "hermes-backend"),
+            ev(3, "edit", minutesAgo: 7, files: ["build_slides.py"]),
+        ], now: now)
+        let a = m.editing.first { $0.change == "hermes-default/t_aaaaaaaa" }!
+        // The same records really are in both lists...
+        #expect(Set(m.trail(for: a).map(\.id)).isSubset(of: Set(m.feed.map(\.id))))
+        // ...but their row identities differ.
+        #expect(m.trailRows(for: a).map(\.item.id.seq) == [3, 1])
+        let all = m.renderedKeys(expanded: Set(m.editing.map(\.change)), shown: WeftStripModel.pageSize)
+        #expect(all.count == 2 + 1 + 3)
+        #expect(Set(all).count == all.count)
+        #expect(m.feed.map(\.feedKey) == m.feed.map { WeftStripModel.RowKey.feed($0.id) })
+    }
+
     @Test func landedOrStaleChangesAreNotEditingNowButStayInTheFeed() {
         let m = WeftStripModel.make(events: [
             ev(1, "edit", minutesAgo: 30, files: ["a.swift"]),

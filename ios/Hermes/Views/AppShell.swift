@@ -452,6 +452,8 @@ struct AppShell: View {
            let w = WorkspaceStore.shared.active.first(where: { $0.name.lowercased() == name }) {
             enterWorkspace(w.id)
             if d.bool(forKey: "hermes.drawer") { drawerOpen = true }
+            // Unattended screenshots of the compact Weft sheet: -hermes.weftSheet YES.
+            if d.bool(forKey: "hermes.weftSheet") { weftSheet = true }
             return
         }
         if let id = d.string(forKey: "hermes.open"), let s = app.sessions.first(where: { $0.id == id }) {
@@ -598,13 +600,13 @@ struct DrawerView: View {
                         if !pinned.isEmpty {
                             sectionTitle("Pinned", key: "pinned", count: pinned.count,
                                          running: pinned.contains { app.runningSessionIDs.contains($0.id) })
-                            if !isCollapsed("pinned") { ForEach(pinned) { chatRow($0) } }
+                            if !isCollapsed("pinned") { ForEach(SidebarSectionRow.rows(pinned, section: "pinned")) { chatRow($0.item) } }
                         }
                         if !recents.isEmpty {
                             sectionTitle(workspaces.active.isEmpty ? "Recents" : "Other chats", key: "recents",
                                          count: recents.count,
                                          running: recents.contains { app.runningSessionIDs.contains($0.id) })
-                            if !isCollapsed("recents") { ForEach(recents) { chatRow($0) } }
+                            if !isCollapsed("recents") { ForEach(SidebarSectionRow.rows(recents, section: "recents")) { chatRow($0.item) } }
                         }
                     }
                     Color.clear.frame(height: 110)
@@ -721,7 +723,9 @@ struct DrawerView: View {
                 Text(workspaces.isKnownEmpty(id) ? "No chats here yet. Tap Chat to start one." : "Loading…")
                     .font(.footnote).foregroundStyle(.secondary).padding(.horizontal, 20)
             }
-            ForEach(rows) { r in chatRow(app.sessions.first(where: { $0.id == r.id }) ?? r.summary) }
+            ForEach(SidebarSectionRow.rows(rows, section: "workspace.\(id)")) { row in
+                chatRow(app.sessions.first(where: { $0.id == row.item.id }) ?? row.item.summary)
+            }
         }
     }
 
@@ -899,7 +903,7 @@ struct DrawerView: View {
                 .foregroundStyle(.secondary)
                 .padding(.horizontal, 20)
         } else {
-            ForEach(results) { chatRow($0, showSource: true) }
+            ForEach(SidebarSectionRow.rows(results, section: "results")) { chatRow($0.item, showSource: true) }
         }
     }
 

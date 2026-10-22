@@ -8,6 +8,12 @@ sudoers-allowed `pmset -a disablesleep` / `pmset -b lowpowermode` commands, the 
 written before each change, the read-back of SleepDisabled, the launchd backstop, the battery and
 thermal floors, and the timer model.
 
+Otto's iPhone hotspot failover (netwatch/, relay/netwatch.py, scripts/install_netwatch.sh,
+ios/OttoMac/Hotspot.swift) ports Insomnia's hotspot handoff: joining the Personal Hotspot with a CoreWLAN
+SSID-filtered scan and associate (the password never in process arguments), the hotspot password in the login
+Keychain read with prompts switched off, Location Services to read Wi-Fi network names, and failover after a
+sustained Wi-Fi loss with backoff.
+
 https://github.com/krishhgg/Insomnia
 
 ```
