@@ -6,7 +6,9 @@ Runs in its own venv (~/.hermes/local-voice/venv: parakeet-mlx + mlx-audio) as L
   - the relay (/hermes/local-voice/*) for Otto's voice mode, dictation and Read aloud,
   - Hermes itself (stt/tts command providers `otto-local`) for Telegram/WhatsApp voice notes.
 
-Routes (localhost only, no auth; the relay is the authenticated front door):
+Routes (localhost only, no auth; the relay is the authenticated front door). Requests from a browser
+(Origin / Sec-Fetch-* headers), through a proxy, or with a non-loopback Host (DNS rebinding) get 403,
+so a web page open on this Mac can't drive the models (same guard as macpair.is_direct_loopback):
   GET  /health                      {"ready", "stt_model", "tts_model"}
   GET  /voices                      Kokoro English voices
   POST /stt                         body = audio (wav/m4a/mp3/ogg… or raw PCM16 16 kHz mono with
@@ -25,6 +27,8 @@ import threading
 import time
 import wave
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+from macpair import is_direct_loopback
 
 PORT = int(os.environ.get("OTTO_LOCAL_VOICE_PORT", "8653"))
 STT_MODEL = os.environ.get("OTTO_LOCAL_STT_MODEL", "mlx-community/parakeet-tdt-0.6b-v3")
@@ -142,7 +146,15 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b)
 
+    def _refused(self) -> bool:
+        if is_direct_loopback(self.client_address[0], self.headers):
+            return False
+        self._json(403, {"detail": "local clients only"})
+        return True
+
     def do_GET(self):
+        if self._refused():
+            return
         if self.path == "/health":
             return self._json(200, {"ready": _ready.is_set(), "stt_model": STT_MODEL, "tts_model": TTS_MODEL,
                                     "default_voice": DEFAULT_VOICE})
@@ -152,6 +164,8 @@ class Handler(BaseHTTPRequestHandler):
         self._json(404, {"detail": "not found"})
 
     def do_POST(self):
+        if self._refused():
+            return
         n = int(self.headers.get("Content-Length") or 0)
         if n <= 0 or n > MAX_BODY:
             return self._json(413 if n else 400, {"detail": "bad body size"})

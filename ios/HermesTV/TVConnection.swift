@@ -28,7 +28,7 @@ enum TVKeychain {
         guard let c, let data = try? JSONEncoder().encode(c) else { return }
         var q = base()
         q[kSecValueData as String] = data
-        q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
+        q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly  // never restored onto another device
         SecItemAdd(q as CFDictionary, nil)
     }
 
